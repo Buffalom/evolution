@@ -20,9 +20,10 @@ class Tile {
     
     push()
     fill(this.meta.water ? 'blue' : foodColor)
+    stroke(this.meta.water ? 'blue' : foodColor)
     rect(this.pos.x, this.pos.y, this.width, this.height)
-    fill(0)
-    if (this.meta.food) {
+    if (!this.meta.water) {
+      fill(0)
       textSize(12)
       text(this.meta.food, this.pos.x, this.pos.y, this.width, this.height)
     }
