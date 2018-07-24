@@ -1,25 +1,25 @@
 class Board {
-  constructor (gridSizeHor, options) {
+  constructor (rows, cols, tileSize, options) {
     this.options = options || {}
-    let tileSize = width / gridSizeHor
-    this.gridSizeHor = gridSizeHor
-    this.gridSizeVer = Math.floor(height / tileSize)
+    this.tileSize = tileSize
+    this.cols = cols
+    this.rows = rows
 
     // Initializing all tiles
     this.tiles = []
-    for (let y = 0; y < this.gridSizeVer; y++) {
+    for (let y = 0; y < this.rows; y++) {
       this.tiles[y] = []
-      for (let x = 0; x < this.gridSizeHor; x++) {
-        let pos = createVector(tileSize * x, tileSize * y)
+      for (let x = 0; x < this.cols; x++) {
+        let pos = createVector(this.tileSize * x, this.tileSize * y)
         // Reading neighbour meta
         let neighbourMeta = this.getNeighbourMeta(x, y)
         // Generating meta based on meta of neighbours
         let waterChance = map(neighbourMeta.water, 0, neighbourMeta.neighbourCount, this.options.waterAmount || 0.05, this.options.waterSize || 0.9)
         let meta = {
-          water: Math.random() < waterChance,
-          food: Math.floor((Math.random() * 101 * (this.options.foodRandomness || 4) + (neighbourMeta.food)) / ((this.options.foodRandomness || 4) + 1))
+          water: random() < waterChance,
+          food: Math.floor((random(101) * (this.options.foodRandomness || 4) + (neighbourMeta.food)) / ((this.options.foodRandomness || 4) + 1))
         }
-        let tile = new Tile(tileSize, pos.x, pos.y, meta)
+        let tile = new Tile(this.tileSize, pos.x, pos.y, meta)
         this.tiles[y][x] = tile
       }
     }
@@ -58,7 +58,7 @@ class Board {
       addMeta(this.tiles[yIndex][xIndex - 1])
       addMeta(this.tiles[yIndex][xIndex + 1])
     }
-    if (yIndex < this.gridSizeVer && this.tiles[yIndex + 1]) {
+    if (yIndex < this.rows && this.tiles[yIndex + 1]) {
       addMeta(this.tiles[yIndex + 1][xIndex - 1])
       addMeta(this.tiles[yIndex + 1][xIndex])
       addMeta(this.tiles[yIndex + 1][xIndex + 1])
