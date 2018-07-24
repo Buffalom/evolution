@@ -4,6 +4,9 @@ const boardInit = {
 var board
 const animalInit = {
   count: 1,
+  eyeCount: 3,
+  fieldOfVision: 120,
+  visualRange: 50,
   size: 0.7
 }
 var animals
@@ -24,7 +27,11 @@ function setup () {
 
   this.animals = []
   for (let i = 0; i < animalInit.count; i++) {
-    let animal = new Animal(board.tileSize * animalInit.size, random(width), random(height))
+    let animal = new Animal(board.tileSize * animalInit.size, random(width), random(height), {
+      eyeCount: animalInit.eyeCount,
+      fieldOfVision: animalInit.fieldOfVision,
+      visualRange: animalInit.visualRange
+    })
     animal.draw()
     this.animals[i] = animal
   }
