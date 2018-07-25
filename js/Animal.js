@@ -24,13 +24,16 @@ class Animal {
 
   draw () {
     push()
+    translate(this.pos.x, this.pos.y)
+    rotate()
     fill(150)
     stroke(0)
-    ellipse(this.pos.x, this.pos.y, this.size)
+    ellipse(0, 0, this.size)
     // Draw eyes
     this.eyes.forEach((eye, index) => {
-      eye.draw(this.pos)
       console.log(`Eye ${index}:`, this.hueSeenByEye(index))
+      eye.draw(this.pos)
+      // console.log(eye)
     })
     pop()
   }

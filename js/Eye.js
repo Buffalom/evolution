@@ -6,21 +6,15 @@ class Eye {
   }
 
   hueSeen (animalPos) {
-    let absoluteEyePos = this.relPos.add(animalPos)
-    let rgba = get(absoluteEyePos.x, absoluteEyePos.y)
+    let rgba = get(this.relPos.x, this.relPos.y)
     let seenColor = color(rgba[0], rgba[1], rgba[2], rgba[3])
     return hue(seenColor)
   }
 
   draw (animalPos) {
-    let lookPos = this.relPos.setMag(this.relPos.mag() + this.size)
-    console.log(this.relPos, lookPos)
-    let absoluteEyePos = lookPos.add(animalPos)
-    push()
     fill(0)
     stroke(0)
-    ellipse(absoluteEyePos.x, absoluteEyePos.y, this.size)
-    line(animalPos.x, animalPos.y, absoluteEyePos.x, absoluteEyePos.y)
-    pop()
+    ellipse(this.relPos.x, this.relPos.y, this.size)
+    line(0, 0, this.relPos.x, this.relPos.y)
   }
 }
