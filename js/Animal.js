@@ -25,21 +25,24 @@ class Animal {
   draw () {
     push()
     translate(this.pos.x, this.pos.y)
-    rotate()
+    // Draw eyes
+    this.eyes.forEach((eye, index) => {
+      // Read eyes
+      // console.log(`Eye ${index}:`, this.hueSeenByEye(index))
+      eye.draw()
+    })
     fill(150)
     stroke(0)
     ellipse(0, 0, this.size)
-    // Draw eyes
-    this.eyes.forEach((eye, index) => {
-      console.log(`Eye ${index}:`, this.hueSeenByEye(index))
-      eye.draw(this.pos)
-      // console.log(eye)
-    })
     pop()
   }
 
   hueSeenByEye (eyeIndex) {
     let eye = this.eyes[eyeIndex]
-    return eye.hueSeen(this.pos)
+    return eye.hueSeen()
+  }
+
+  absoluteEyePos (eyeIndex) {
+    return p5.Vector.add(this.pos, this.eyes[eyeIndex].relPos)
   }
 }

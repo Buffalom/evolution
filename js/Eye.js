@@ -5,13 +5,13 @@ class Eye {
     this.options = options || {}
   }
 
-  hueSeen (animalPos) {
+  hueSeen () {
     let rgba = get(this.relPos.x, this.relPos.y)
     let seenColor = color(rgba[0], rgba[1], rgba[2], rgba[3])
     return hue(seenColor)
   }
 
-  draw (animalPos) {
+  draw () {
     fill(0)
     stroke(0)
     ellipse(this.relPos.x, this.relPos.y, this.size)

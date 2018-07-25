@@ -12,15 +12,9 @@ class Tile {
   }
 
   draw () {
-    let foodColor = color(
-      map(this.meta.food, 50, 80, 255, 0),
-      this.meta.food <= 50 ? map(this.meta.food, 0, 50, 100, 255) : map(this.meta.food, 80, 100, 255, 100),
-      0
-    )
-    
     push()
-    fill(this.meta.water ? 'blue' : foodColor)
-    stroke(this.meta.water ? 'blue' : foodColor)
+    fill(this.color)
+    stroke(this.color)
     rect(this.pos.x, this.pos.y, this.width, this.height)
     if (!this.meta.water) {
       fill(0)
@@ -28,5 +22,14 @@ class Tile {
       text(this.meta.food, this.pos.x, this.pos.y, this.width, this.height)
     }
     pop()
+  }
+
+  get color () {
+    let foodColor = color(
+      map(this.meta.food, 50, 80, 255, 0),
+      this.meta.food <= 50 ? map(this.meta.food, 0, 50, 100, 255) : map(this.meta.food, 80, 100, 255, 100),
+      0
+    )
+    return this.meta.water ? color('blue') : foodColor
   }
 }
