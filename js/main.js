@@ -26,7 +26,7 @@ function setup () {
   })
   board.draw()
 
-  this.animals = []
+  animals = []
   for (let i = 0; i < animalInit.count; i++) {
     let animal = new Animal(board.tileSize * animalInit.size, random(width), random(height), {
       eyeCount: animalInit.eyeCount,
@@ -34,8 +34,17 @@ function setup () {
       visualRange: animalInit.visualRange * board.tileSize
     })
     animal.draw()
-    this.animals[i] = animal
+    animals[i] = animal
   }
+
+  animals.forEach((animal, index) => {
+    console.log(`Animal ${index}`)
+    animal.eyes.forEach((eye, index) => {
+      // Read eyes
+      console.log(`Eye ${index}:`, hueOnPixel(animal.absoluteEyePos(index)))
+    })
+    animal.draw()
+  })
 }
 
 function draw () {
@@ -47,4 +56,8 @@ function drawEverything () {
   animals.forEach((animal, index) => {
     animal.draw()
   })
+}
+
+function hueOnPixel (pos) {
+  return hue(board.tiles[Math.floor(pos.x / board.tileSize)][Math.floor(pos.y / board.tileSize)].color)
 }
