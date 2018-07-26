@@ -1,8 +1,9 @@
 class Animal {
   constructor (size, x, y, options) {
+    // Possible options: eyeCount, fieldOfVision, visualRange
+    this.options = options || {}
     this.size = size
     this.pos = createVector(x, y)
-    this.options = options || {}
 
     // Init eyes
     this.eyes = []
@@ -26,20 +27,21 @@ class Animal {
     push()
     translate(this.pos.x, this.pos.y)
     // Draw eyes
-    this.eyes.forEach((eye, index) => {
-      // Read eyes
-      // console.log(`Eye ${index}:`, this.hueSeenByEye(index))
-      eye.draw()
-    })
+    if (debug) {
+      this.eyes.forEach((eye, index) => {
+        eye.draw()
+      })
+    }
     fill(150)
     stroke(0)
     ellipse(0, 0, this.size)
+    ellipse(this.size / 2 * 0.8, 0, this.size / 2)
     pop()
   }
 
   hueSeenByEye (eyeIndex) {
-    let eye = this.eyes[eyeIndex]
-    return eye.hueSeen()
+    let eyePos = this.absoluteEyePos(eyeIndex)
+    return hue(get(eyePos.x, eyePos.y))
   }
 
   absoluteEyePos (eyeIndex) {

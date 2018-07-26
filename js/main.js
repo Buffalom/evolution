@@ -1,3 +1,5 @@
+var debug = true
+
 const boardInit = {
   cols: 20
 }
@@ -21,7 +23,7 @@ function setup () {
 
   board = new Board(rows, cols, tileSize, {
     waterAmount: 0.05,
-    waterSize: 0.88,
+    waterSize: 0.9,
     foodRandomness: 2
   })
   board.draw()
@@ -33,7 +35,6 @@ function setup () {
       fieldOfVision: animalInit.fieldOfVision,
       visualRange: animalInit.visualRange * board.tileSize
     })
-    animal.draw()
     animals[i] = animal
   }
 
@@ -59,5 +60,6 @@ function drawEverything () {
 }
 
 function hueOnPixel (pos) {
-  return hue(board.tiles[Math.floor(pos.x / board.tileSize)][Math.floor(pos.y / board.tileSize)].color)
+  let tile = board.getTileAtPos(pos)
+  return tile ? hue(tile.color) : null
 }

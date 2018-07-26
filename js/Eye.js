@@ -7,8 +7,7 @@ class Eye {
 
   hueSeen () {
     let rgba = get(this.relPos.x, this.relPos.y)
-    let seenColor = color(rgba[0], rgba[1], rgba[2], rgba[3])
-    return hue(seenColor)
+    return hue(rgba)
   }
 
   draw () {

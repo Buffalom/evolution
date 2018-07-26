@@ -1,5 +1,6 @@
 class Board {
   constructor (rows, cols, tileSize, options) {
+    // Possible options: waterAmount, waterSize, foodRandomness
     this.options = options || {}
     this.tileSize = tileSize
     this.cols = cols
@@ -65,5 +66,12 @@ class Board {
     }
     neighbourMeta.food = neighbourMeta.food > 0 && neighbourMeta.neighbourCount > 0 ? neighbourMeta.food / neighbourMeta.neighbourCount : 0
     return neighbourMeta
+  }
+
+  getTileAtPos (pos) {
+    if (!this.tiles) return null
+    let row = this.tiles[Math.floor(pos.y / this.tileSize)]
+    if (!row) return null
+    return row[Math.floor(pos.x / this.tileSize)] || null
   }
 }
