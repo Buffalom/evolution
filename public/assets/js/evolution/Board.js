@@ -17,13 +17,18 @@ class Board {
       // Initialize row with tiles
       this.rows[rowIndex] = new Array(this.tileOptions.cols).fill(undefined)
       this.rows[rowIndex].forEach((col, colIndex) => {
+        // Calculate position vector
         let pos = createVector(this.tileOptions.size * colIndex, this.tileOptions.size * rowIndex)
+        // Collect meta of surrounding tiles
         let neighbourMeta = this.getNeighbourMeta(colIndex, rowIndex)
+        // Calculate chance of water based on neighbours
         let chanceForWater = map(neighbourMeta.water, 0, neighbourMeta.neighbourCount, this.worldOptions.waterAmount || 0.05, this.worldOptions.waterSize || 0.9)
         let meta = {
+          // Calculate food based on neighbours and some randomness
           food: floor((random(101) * (this.worldOptions.foodRandomness || 4) + (neighbourMeta.food || 50)) / ((this.worldOptions.foodRandomness || 4) + 1)),
           water: random() < chanceForWater
         }
+        // Add tile to board
         this.rows[rowIndex][colIndex] = new Tile(pos, this.tileOptions.size, meta)
       })
     })
@@ -69,5 +74,16 @@ class Board {
         tile.draw()
       })
     })
+  }
+
+  // Generate JS-object with all information to replicate
+  createJsObject () {
+    // TODO: Generate JS-object with all information to replicate
+  }
+
+  // Replicate from JS-object
+  static fromJsObject (object) {
+    Object.requiresProperties(object)
+    // TODO: Replicate from JS-object
   }
 }

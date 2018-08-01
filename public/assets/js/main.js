@@ -4,26 +4,16 @@ const options = {
   waterSize: 0.9,
   foodRandomness: 1
 }
+var world = new World(options)
 
 function setup () {
-  let cols = options.cols
-  let tileSize = floor(windowWidth / cols)
-  let rows = floor(windowHeight / tileSize)
-  createCanvas(cols * tileSize, rows * tileSize)
+  world.setup()
 
-  let tileOptions = {
-    size: tileSize,
-    cols, rows
-  }
-  let worldOptions = {
-    waterAmount: options.waterAmount,
-    waterSize: options.waterSize,
-    foodRandomness: options.foodRandomness
-  }
-  let board = new Board(tileOptions, worldOptions)
-  board.draw()
+  let hex = world.toHexCode()
+  console.log(hex)
+  let world2 = World.fromHexCode(hex)
 }
 
 function draw () {
-
+  world.draw()
 }

@@ -26,4 +26,15 @@ class Tile {
     rect(0, 0, this.size, this.size)
     pop()
   }
+
+  // Generate JS-object with all information to replicate
+  createJsObject () {
+    // TODO: Generate JS-object with all information to replicate
+  }
+
+  // Replicate from JS-object
+  static fromJsObject (object) {
+    Object.requiresProperties(object)
+    // TODO: Replicate from JS-object
+  }
 }
