@@ -1,10 +1,15 @@
 const options = {
+  // World
   cols: 10,
   waterAmount: 0.05,
   waterSize: 0.9,
   foodRandomness: 20,
+  // Animal
   animalCount: 1,
-  animalSize: 0.7
+  animalSize: 0.7,
+  eyeCount: 5,
+  fieldOfVision: 160,
+  visualRangeInTiles: 2
 }
 
 const generateNewId = false

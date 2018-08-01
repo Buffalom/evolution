@@ -1,5 +1,5 @@
 class Animal {
-  constructor (pos, size, meta) {
+  constructor (pos, size, meta, options) {
     Object.requiresProperties(pos, [
       { key: 'x', type: 'number', min: 0 },
       { key: 'y', type: 'number', min: 0 }
@@ -10,10 +10,30 @@ class Animal {
       { key: 'health', type: 'number', min: 0, max: 100 }
     ])
     this.meta = meta
+    Object.requiresProperties(options, [
+      { key: 'eyeCount', type: 'number', min: 1, max: 10 },
+      { key: 'fieldOfVision', type: 'number', min: 1, max: 340 },
+      { key: 'visualRange', type: 'number', min: 1 }
+    ], true)
+    this.options = options
+
+    this.initEyes()
   }
 
   initEyes () {
-
+    let eyeCount = this.options.eyeCount
+    this.eyes = []
+    this.eyes[0] = new Eye(createVector(0, 0), this.size * 0.2)
+    eyeCount--
+    if (eyeCount === 1) {
+      this.eyes[1] = new Eye(createVector(this.options.visualRange, 0), this.size * 0.2)
+    } else {
+      for (let i = 0; i < eyeCount; i++) {
+        let eyeGap = this.options.fieldOfVision / (eyeCount - 1)
+        let pos = p5.Vector.fromAngle(radians(this.options.fieldOfVision * -0.5 + eyeGap * i)).setMag(this.options.visualRange)
+        this.eyes[i + 1] = new Eye(pos, this.size * 0.2)
+      }
+    }
   }
 
   get color () {
@@ -28,6 +48,9 @@ class Animal {
     ellipse(0, 0, this.size)
     fill(this.color)
     ellipse(this.size * 0.4, 0, this.size * 0.5)
+    this.eyes.forEach(eye => {
+      eye.draw()
+    })
     pop()
   }
   
@@ -47,7 +70,8 @@ class Animal {
       //   y: this.acc.y
       // },
       size: this.size,
-      meta: this.meta
+      meta: this.meta,
+      options: this.options
     }
   }
 
@@ -58,10 +82,10 @@ class Animal {
       // { key: 'vel', type: 'object' },
       // { key: 'acc', type: 'object' },
       { key: 'size', type: 'number', min: 1 },
-      { key: 'meta', type: 'object' }
+      { key: 'meta', type: 'object' },
+      { key: 'options', type: 'object' }
     ])
-    let newAnimal = new this(o.pos, o.size, o.meta)
-    newAnimal.initEyes()
+    let newAnimal = new this(o.pos, o.size, o.meta, o.options)
     return newAnimal
   }
 }

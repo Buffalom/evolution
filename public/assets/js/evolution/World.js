@@ -36,10 +36,14 @@ class World {
         let animalMeta = {
           health: 100
         }
-        let animal = new Animal(createVector(random(width), random(height)), this.board.tileOptions.size * this.options.animalSize, animalMeta)
+        let animalOptions = {
+          eyeCount: this.options.eyeCount,
+          fieldOfVision: this.options.fieldOfVision,
+          visualRange: this.options.visualRangeInTiles * this.board.tileOptions.size
+        }
+        let animal = new Animal(createVector(random(width), random(height)), this.board.tileOptions.size * this.options.animalSize, animalMeta, animalOptions)
         return animal
       })
-      console.log(this.animals)
     }
   }
 

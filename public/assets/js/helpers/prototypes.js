@@ -35,7 +35,8 @@ Object.prototype.requiresProperties = function (requiredProperties) {
 // Checks if object is actually an object and then checks if required properties of object are provided
 Object.requiresProperties = function (object, requiredProperties, optional = false) {
   if (!optional && typeof object !== 'object') throw new Error('Parameter is required and needs to be an object')
-  if (requiredProperties) object.requiresProperties(requiredProperties)
+  if (object !== undefined && typeof object !== 'object') throw new Error('Parameter needs to be an object')
+  if (object !== undefined && typeof object === 'object' && requiredProperties) object.requiresProperties(requiredProperties)
 }
 
 // LZW-compress a string
