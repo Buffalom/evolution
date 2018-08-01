@@ -91,10 +91,8 @@ class Board {
       tileOptions: this.tileOptions,
       boardOptions: this.boardOptions
     }
-    o.rows = this.rows.map((tiles, rowIndex) => {
-      return tiles.map((tile, colIndex) => {
-        return tile.createJsObject()
-      })
+    o.rows = this.rows.map(tiles => {
+      return tiles.map(tile => tile.createJsObject())
     })
     return o
   }
@@ -107,10 +105,8 @@ class Board {
       { key: 'rows', type: 'array' }
     ])
     let newBoard = new this(o.tileOptions, o.boardOptions, false)
-    newBoard.rows = o.rows.map((tiles, rowIndex) => {
-      return tiles.map((tile, colIndex) => {
-        return Tile.fromJsObject(tile)
-      })
+    newBoard.rows = o.rows.map(tiles => {
+      return tiles.map(tile => Tile.fromJsObject(tile))
     })
     return newBoard
   }

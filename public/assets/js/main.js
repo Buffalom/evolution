@@ -2,9 +2,12 @@ const options = {
   cols: 10,
   waterAmount: 0.05,
   waterSize: 0.9,
-  foodRandomness: 20
+  foodRandomness: 20,
+  animalCount: 1,
+  animalSize: 0.7
 }
 
+const generateNewId = false
 var worldId
 const worldIdRegex = /^[a-zA-Z0-9]{5}$/
 if (window.location.pathname.split('/')[1].match(worldIdRegex)) {
@@ -23,7 +26,7 @@ async function setup () {
 
   world.setup()
 
-  if (!worldId) {
+  if (!worldId && generateNewId) {
     let worldCode = world.toCode()
     axios.post('/worlds/add', { worldCode }).then(response => {
       console.log('World Id:', response.data.id)

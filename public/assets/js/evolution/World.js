@@ -1,20 +1,24 @@
 class World {
-  constructor (options, initializeBoard = true) {
+  constructor (options, initialize = true) {
     Object.requiresProperties(options, [
-      { key: 'cols', type: 'number', min: 1 }
+      { key: 'cols', type: 'number', min: 1 },
+      { key: 'animalCount', type: 'number', min: 0 },
+      { key: 'animalSize', type: 'number', min: 0 }
     ])
     this.options = options
-    this.initializeBoard = initializeBoard
+    this.initialize = initialize
   }
 
   setup () {
     let cols =  this.options.cols
     let tileSize = floor(windowWidth / cols)
     let rows = floor(windowHeight / tileSize)
+    angleMode(DEGREES)
     colorMode(HSB, 360, 100, 100)
     createCanvas(cols * tileSize, rows * tileSize)
 
-    if (this.initializeBoard !== false) {
+    if (this.initialize !== false) {
+      // Initialize board
       let tileOptions = {
         size: tileSize,
         cols,
@@ -26,6 +30,16 @@ class World {
         foodRandomness:  this.options.foodRandomness
       }
       this.board = new Board(tileOptions, boardOptions)
+
+      // Initialize animals
+      this.animals = new Array(this.options.animalCount).fill(undefined).map(() => {
+        let animalMeta = {
+          health: 100
+        }
+        let animal = new Animal(createVector(random(width), random(height)), this.board.tileOptions.size * this.options.animalSize, animalMeta)
+        return animal
+      })
+      console.log(this.animals)
     }
   }
 
@@ -35,24 +49,29 @@ class World {
 
   draw () {
     this.board.draw()
+    this.animals.forEach(animal => animal.draw())
   }
 
   // Generate JS-object with all information to replicate
   createJsObject () {
-    return {
+    let o = {
       options: this.options,
       board: this.board.createJsObject()
     }
+    o.animals = this.animals.map(animal => animal.createJsObject())
+    return o
   }
 
   // Replicate from JS-object
   static fromJsObject (o) {
     Object.requiresProperties(o, [
       { key: 'options', type: 'object' },
-      { key: 'board', type: 'object' }
+      { key: 'board', type: 'object' },
+      { key: 'animals', type: 'array' }
     ])
     let newWorld = new this(o.options, false)
     newWorld.board = Board.fromJsObject(o.board)
+    newWorld.animals = o.animals.map(animal => Animal.fromJsObject(animal))
     return newWorld
   }
 
