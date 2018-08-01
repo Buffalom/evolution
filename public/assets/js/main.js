@@ -16,7 +16,7 @@ var world
 async function setup () {
   if (worldId) {
     let response = await axios.get('/worlds/' + worldId)
-    world = World.fromCode(response.data.worldHash)
+    world = World.fromCode(response.data.worldCode)
   } else {
     world = new World(options)
   }
@@ -24,8 +24,8 @@ async function setup () {
   world.setup()
 
   if (!worldId) {
-    let worldHash = world.toCode()
-    axios.post('/worlds/add', { worldHash }).then(response => {
+    let worldCode = world.toCode()
+    axios.post('/worlds/add', { worldCode }).then(response => {
       console.log('World Id:', response.data.id)
     })
   }

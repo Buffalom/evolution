@@ -41,7 +41,7 @@ app.post('/worlds/add', (req, res) => {
     let id = makeId(idLength)
     if (!data.worlds[id]) {
       data.worlds[id] = {
-        worldHash: req.body.worldHash || ''
+        worldCode: req.body.worldCode || ''
       }
       fs.writeFileSync(serverDataFile, JSON.stringify(data, null, '  '))
       res.send({ id })
