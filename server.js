@@ -59,7 +59,11 @@ app.post('/worlds/clear', (req, res) => {
   res.send({ message: 'All worlds cleared' })
 })
 
-app.get('/', express.static(__dirname + '/public'))
+const sendIndex = (req, res) => {
+  res.sendFile(__dirname + '/public/index.html')
+}
+app.get('^/:id([a-zA-Z0-9]{5})', sendIndex)
+app.get('/', sendIndex)
 app.get('/assets/*', express.static(__dirname + '/public'))
 
 const port = process.env.PORT || 3000

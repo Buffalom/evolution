@@ -4,7 +4,13 @@ const options = {
   waterSize: 0.9,
   foodRandomness: 1
 }
-const worldId = 'xpp8t'
+
+var worldId
+const worldIdRegex = /^[a-zA-Z0-9]{5}$/
+if (window.location.pathname.split('/')[1].match(worldIdRegex)) {
+  worldId = window.location.pathname.split('/')[1]
+}
+
 var world
 
 async function setup () {
