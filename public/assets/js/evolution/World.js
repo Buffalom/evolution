@@ -66,4 +66,11 @@ class World {
     if (!code) throw new Error('Please provide a lzw encoded code to convert')
     return this.fromJsObject(JSON.parse(code.lzw_decode()))
   }
+
+  // Clear all worlds in backend store
+  static clearAllWorlds () {
+    axios.post('/worlds/clear').then(response => {
+      console.log(response.data.message)
+    })
+  }
 }
