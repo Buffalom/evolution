@@ -11,6 +11,7 @@ class World {
     let cols =  this.options.cols
     let tileSize = floor(windowWidth / cols)
     let rows = floor(windowHeight / tileSize)
+    colorMode(HSB, 360, 100, 100)
     createCanvas(cols * tileSize, rows * tileSize)
 
     if (this.initializeBoard !== false) {

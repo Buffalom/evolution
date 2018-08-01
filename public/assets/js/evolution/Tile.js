@@ -11,9 +11,9 @@ class Tile {
 
   get color () {
     let foodColor = color(
-      map(this.meta.food, 50, 80, 255, 0),
-      this.meta.food <= 50 ? map(this.meta.food, 0, 50, 100, 255) : map(this.meta.food, 80, 100, 255, 100),
-      0
+      map(this.meta.food, 0, 100, 20, 120),
+      100,
+      map(this.meta.food, 60, 100, 100, 50)
     )
     return this.meta.water ? color('blue') : foodColor
   }

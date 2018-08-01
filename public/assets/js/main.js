@@ -1,6 +1,6 @@
 const options = {
   cols: 10,
-  waterAmount: 0.01,
+  waterAmount: 0.05,
   waterSize: 0.9,
   foodRandomness: 20
 }
