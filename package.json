@@ -6,6 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "dependencies": {
+    "express": "^4.16.3"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Buffalom/evolution.git"
@@ -15,8 +18,5 @@
   "bugs": {
     "url": "https://github.com/Buffalom/evolution/issues"
   },
-  "homepage": "https://github.com/Buffalom/evolution#readme",
-  "dependencies": {
-    "express": "^4.16.3"
-  }
+  "homepage": "https://github.com/Buffalom/evolution#readme"
 }

@@ -1,13 +1,15 @@
 class Board {
-  constructor (tileOptions, worldOptions = {}) {
+  constructor (tileOptions, boardOptions = {}, initialize = true) {
     Object.requiresProperties(tileOptions, [
       { key: 'size', type: 'number' },
       { key: 'rows', type: 'number' },
       { key: 'cols', type: 'number' }
     ])
     this.tileOptions = tileOptions
-    this.worldOptions = worldOptions
-    this.initTiles()
+    this.boardOptions = boardOptions
+    if (initialize !== false) {
+      this.initTiles()
+    }
   }
 
   initTiles () {
@@ -22,10 +24,10 @@ class Board {
         // Collect meta of surrounding tiles
         let neighbourMeta = this.getNeighbourMeta(colIndex, rowIndex)
         // Calculate chance of water based on neighbours
-        let chanceForWater = map(neighbourMeta.water, 0, neighbourMeta.neighbourCount, this.worldOptions.waterAmount || 0.05, this.worldOptions.waterSize || 0.9)
+        let chanceForWater = map(neighbourMeta.water, 0, neighbourMeta.neighbourCount, this.boardOptions.waterAmount || 0.05, this.boardOptions.waterSize || 0.9)
         let meta = {
           // Calculate food based on neighbours and some randomness
-          food: floor((random(101) * (this.worldOptions.foodRandomness || 4) + (neighbourMeta.food || 50)) / ((this.worldOptions.foodRandomness || 4) + 1)),
+          food: floor((random(101) * (this.boardOptions.foodRandomness || 4) + (neighbourMeta.food || 50)) / ((this.boardOptions.foodRandomness || 4) + 1)),
           water: random() < chanceForWater
         }
         // Add tile to board
@@ -78,12 +80,31 @@ class Board {
 
   // Generate JS-object with all information to replicate
   createJsObject () {
-    // TODO: Generate JS-object with all information to replicate
+    let o = {
+      tileOptions: this.tileOptions,
+      boardOptions: this.boardOptions
+    }
+    o.rows = this.rows.map((tiles, rowIndex) => {
+      return tiles.map((tile, colIndex) => {
+        return tile.createJsObject()
+      })
+    })
+    return o
   }
 
   // Replicate from JS-object
-  static fromJsObject (object) {
-    Object.requiresProperties(object)
-    // TODO: Replicate from JS-object
+  static fromJsObject (o) {
+    Object.requiresProperties(o, [
+      { key: 'tileOptions', type: 'object' },
+      { key: 'boardOptions', type: 'object' },
+      { key: 'rows', type: 'array' }
+    ])
+    let newBoard = new this(o.tileOptions, o.boardOptions, false)
+    newBoard.rows = o.rows.map((tiles, rowIndex) => {
+      return tiles.map((tile, colIndex) => {
+        return Tile.fromJsObject(tile)
+      })
+    })
+    return newBoard
   }
 }

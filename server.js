@@ -25,7 +25,7 @@ function initFileIfNotExists (path) {
 const idLength = 5
 const serverDataFile = './serverData.json'
 
-app.get('/world/:id([a-zA-Z0-9]{5})', (req, res) => {
+app.get('/worlds/:id([a-zA-Z0-9]{5})', (req, res) => {
   initFileIfNotExists(serverDataFile)
   let data = JSON.parse(fs.readFileSync(serverDataFile))
   data.worlds[req.params.id]
@@ -33,7 +33,7 @@ app.get('/world/:id([a-zA-Z0-9]{5})', (req, res) => {
     : res.status(404).send({ message: `No world with id ${req.params.id} found.`})
 })
 
-app.post('/world', (req, res) => {
+app.post('/worlds/add', (req, res) => {
   initFileIfNotExists(serverDataFile)
   let data = JSON.parse(fs.readFileSync(serverDataFile))
   let maxCycles = 10
@@ -41,7 +41,7 @@ app.post('/world', (req, res) => {
     let id = makeId(idLength)
     if (!data.worlds[id]) {
       data.worlds[id] = {
-        worldHash: req.query.worldHash || ''
+        worldHash: req.body.worldHash || ''
       }
       fs.writeFileSync(serverDataFile, JSON.stringify(data, null, '  '))
       res.send({ id })
@@ -49,6 +49,14 @@ app.post('/world', (req, res) => {
     }
   }
   res.status(500).send({ message: `No available id could be generated with ${maxCycles} tries.`})
+})
+
+app.post('/worlds/clear', (req, res) => {
+  initFileIfNotExists(serverDataFile)
+  let data = JSON.parse(fs.readFileSync(serverDataFile))
+  data.worlds = {}
+  fs.writeFileSync(serverDataFile, JSON.stringify(data, null, '  '))
+  res.send({ message: 'All worlds cleared' })
 })
 
 app.get('/', express.static(__dirname + '/public'))

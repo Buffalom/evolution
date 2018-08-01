@@ -4,16 +4,29 @@ const options = {
   waterSize: 0.9,
   foodRandomness: 1
 }
-var world = new World(options)
+const worldId = 'xpp8t'
+var world
 
-function setup () {
+async function setup () {
+  if (worldId) {
+    let response = await axios.get('/worlds/' + worldId)
+    world = World.fromCode(response.data.worldHash)
+  } else {
+    world = new World(options)
+  }
+
   world.setup()
 
-  let hex = world.toHexCode()
-  console.log(hex)
-  let world2 = World.fromHexCode(hex)
+  if (!worldId) {
+    let worldHash = world.toCode()
+    axios.post('/worlds/add', { worldHash }).then(response => {
+      console.log('World Id:', response.data.id)
+    })
+  }
+  
+  world.draw()
 }
 
 function draw () {
-  world.draw()
+
 }

@@ -10,8 +10,10 @@ Object.prototype.requiresProperties = function (requiredProperties) {
       // Check existance
       if (!(prop.key in this)) throw new Error(`Property ${prop.key} is required`)
       if ('type' in prop) {
-        // Check type
-        if (typeof this[prop.key] !== prop.type) throw new Error(`Property ${prop.key} must be of type ${prop.type}`)
+        // Check array specifically
+        if (prop.type === 'array' && !Array.isArray(this[prop.key])) throw new Error(`Property ${prop.key} must be of type ${prop.type}`)
+        // Check other types
+        if (typeof this[prop.key] !== prop.type && prop.type !== 'array') throw new Error(`Property ${prop.key} must be of type ${prop.type}`)
         // Checks for numbers
         if (prop.type === 'number') {
           // Check minimum
@@ -36,24 +38,55 @@ Object.requiresProperties = function (object, requiredProperties, optional = fal
   if (requiredProperties) object.requiresProperties(requiredProperties)
 }
 
-// Encode string to hex
-String.prototype.hexEncode = function(){
-  var hex, i;
-  var result = "";
-  for (i=0; i<this.length; i++) {
-    hex = this.charCodeAt(i).toString(16);
-    result += ("000"+hex).slice(-4);
+// LZW-compress a string
+String.prototype.lzw_encode = function () {
+  var dict = {};
+  var data = (this + '').split('');
+  var out = [];
+  var currChar;
+  var phrase = data[0];
+  var code = 256;
+  for (var i=1; i<data.length; i++) {
+      currChar=data[i];
+      if (dict[phrase + currChar] != null) {
+          phrase += currChar;
+      }
+      else {
+          out.push(phrase.length > 1 ? dict[phrase] : phrase.charCodeAt(0));
+          dict[phrase + currChar] = code;
+          code++;
+          phrase=currChar;
+      }
   }
-  return result
+  out.push(phrase.length > 1 ? dict[phrase] : phrase.charCodeAt(0));
+  for (var i=0; i<out.length; i++) {
+      out[i] = String.fromCharCode(out[i]);
+  }
+  return out.join('');
 }
 
-// Decode hex to string
-String.prototype.hexDecode = function(){
-  var j;
-  var hexes = this.match(/.{1,4}/g) || [];
-  var back = "";
-  for(j = 0; j<hexes.length; j++) {
-    back += String.fromCharCode(parseInt(hexes[j], 16));
+// Decompress an LZW-encoded string
+String.prototype.lzw_decode = function () {
+  var dict = {};
+  var data = (this + '').split('');
+  var currChar = data[0];
+  var oldPhrase = currChar;
+  var out = [currChar];
+  var code = 256;
+  var phrase;
+  for (var i=1; i<data.length; i++) {
+      var currCode = data[i].charCodeAt(0);
+      if (currCode < 256) {
+          phrase = data[i];
+      }
+      else {
+         phrase = dict[currCode] ? dict[currCode] : (oldPhrase + currChar);
+      }
+      out.push(phrase);
+      currChar = phrase.charAt(0);
+      dict[code] = oldPhrase + currChar;
+      code++;
+      oldPhrase = phrase;
   }
-  return back;
+  return out.join('');
 }

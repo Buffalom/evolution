@@ -29,12 +29,27 @@ class Tile {
 
   // Generate JS-object with all information to replicate
   createJsObject () {
-    // TODO: Generate JS-object with all information to replicate
+    return {
+      pos: {
+        x: this.pos.x,
+        y: this.pos.y
+      },
+      size: this.size,
+      meta: this.meta
+    }
   }
 
   // Replicate from JS-object
-  static fromJsObject (object) {
-    Object.requiresProperties(object)
-    // TODO: Replicate from JS-object
+  static fromJsObject (o) {
+    Object.requiresProperties(o, [
+      { key: 'pos', type: 'object' },
+      { key: 'size', type: 'number', min: 1 },
+      { key: 'meta', type: 'object' }
+    ])
+    Object.requiresProperties(o.pos, [
+      { key: 'x', type: 'number' },
+      { key: 'y', type: 'number' }
+    ])
+    return new this(createVector(o.pos.x, o.pos.y), o.size, o.meta)
   }
 }
