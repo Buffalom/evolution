@@ -1,8 +1,8 @@
 const options = {
   cols: 10,
-  waterAmount: 0.05,
+  waterAmount: 0.01,
   waterSize: 0.9,
-  foodRandomness: 1
+  foodRandomness: 20
 }
 
 var worldId

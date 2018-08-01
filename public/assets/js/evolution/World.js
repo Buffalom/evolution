@@ -28,6 +28,10 @@ class World {
     }
   }
 
+  getColorAtPos (x, y) {
+    return this.board.getTileAtPos(x, y).color
+  }
+
   draw () {
     this.board.draw()
   }

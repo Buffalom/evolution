@@ -18,7 +18,7 @@ class Board {
     this.rows.forEach((row, rowIndex) => {
       // Initialize row with tiles
       this.rows[rowIndex] = new Array(this.tileOptions.cols).fill(undefined)
-      this.rows[rowIndex].forEach((col, colIndex) => {
+      this.rows[rowIndex].forEach((tile, colIndex) => {
         // Calculate position vector
         let pos = createVector(this.tileOptions.size * colIndex, this.tileOptions.size * rowIndex)
         // Collect meta of surrounding tiles
@@ -27,13 +27,20 @@ class Board {
         let chanceForWater = map(neighbourMeta.water, 0, neighbourMeta.neighbourCount, this.boardOptions.waterAmount || 0.05, this.boardOptions.waterSize || 0.9)
         let meta = {
           // Calculate food based on neighbours and some randomness
-          food: floor((random(101) * (this.boardOptions.foodRandomness || 4) + (neighbourMeta.food || 50)) / ((this.boardOptions.foodRandomness || 4) + 1)),
+          food: floor((random(101) * (this.boardOptions.foodRandomness || 10) + (neighbourMeta.food || 50) * 5) / ((this.boardOptions.foodRandomness || 10) + 5)),
           water: random() < chanceForWater
         }
         // Add tile to board
         this.rows[rowIndex][colIndex] = new Tile(pos, this.tileOptions.size, meta)
       })
     })
+  }
+
+  getTileAtPos(x, y) {
+    if (!this.rows) return null
+    let row = this.rows[Math.floor(y / this.tileOptions.size)]
+    if (!row) return null
+    return row[Math.floor(x / this.tileOptions.size)] || null
   }
 
   getNeighbourMeta (xIndex, yIndex) {
@@ -71,8 +78,8 @@ class Board {
   }
 
   draw () {
-    this.rows.forEach(tiles => {
-      tiles.forEach(tile => {
+    this.rows.forEach(row => {
+      row.forEach(tile => {
         tile.draw()
       })
     })
