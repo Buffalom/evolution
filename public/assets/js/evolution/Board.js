@@ -77,6 +77,10 @@ class Board {
     return neighbourMeta
   }
 
+  update () {
+    
+  }
+
   draw () {
     this.rows.forEach(row => {
       row.forEach(tile => {

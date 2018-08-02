@@ -1,3 +1,5 @@
+const DEBUG = true
+
 const options = {
   // World
   cols: 10,
@@ -9,7 +11,9 @@ const options = {
   animalSize: 0.7,
   eyeCount: 5,
   fieldOfVision: 160,
-  visualRangeInTiles: 2
+  visualRangeInTiles: 2,
+  maxSpeed: 10,
+  maxForce: 0.6
 }
 
 const generateNewId = false
@@ -37,10 +41,14 @@ async function setup () {
       console.log('World Id:', response.data.id)
     })
   }
-  
-  world.draw()
 }
 
 function draw () {
+  world.draw()
+}
 
+function mousePressed () {
+  world.animals.forEach(animal => {
+    animal.setTarget(createVector(mouseX, mouseY))
+  })
 }

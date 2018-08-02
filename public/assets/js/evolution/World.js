@@ -39,9 +39,11 @@ class World {
         let animalOptions = {
           eyeCount: this.options.eyeCount,
           fieldOfVision: this.options.fieldOfVision,
-          visualRange: this.options.visualRangeInTiles * this.board.tileOptions.size
+          visualRange: this.options.visualRangeInTiles * this.board.tileOptions.size,
+          maxSpeed: this.options.maxSpeed,
+          maxForce: this.options.maxForce,
         }
-        let animal = new Animal(createVector(random(width), random(height)), this.board.tileOptions.size * this.options.animalSize, animalMeta, animalOptions)
+        let animal = new Animal(createVector(random(width), random(height)), createVector(0, 0), createVector(0, 0), this.board.tileOptions.size * this.options.animalSize, animalMeta, animalOptions)
         return animal
       })
     }
@@ -52,8 +54,12 @@ class World {
   }
 
   draw () {
+    this.board.update()
     this.board.draw()
-    this.animals.forEach(animal => animal.draw())
+    this.animals.forEach(animal => {
+      animal.update()
+      animal.draw()
+    })
   }
 
   // Generate JS-object with all information to replicate

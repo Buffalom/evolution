@@ -1,10 +1,12 @@
 class Animal {
-  constructor (pos, size, meta, options) {
+  constructor (pos, vel, acc, size, meta, options) {
     Object.requiresProperties(pos, [
       { key: 'x', type: 'number', min: 0 },
       { key: 'y', type: 'number', min: 0 }
     ])
     this.pos = pos
+    this.vel = vel
+    this.acc = acc
     this.size = size
     Object.requiresProperties(meta, [
       { key: 'health', type: 'number', min: 0, max: 100 }
@@ -13,7 +15,9 @@ class Animal {
     Object.requiresProperties(options, [
       { key: 'eyeCount', type: 'number', min: 1, max: 10 },
       { key: 'fieldOfVision', type: 'number', min: 1, max: 340 },
-      { key: 'visualRange', type: 'number', min: 1 }
+      { key: 'visualRange', type: 'number', min: 1 },
+      { key: 'maxSpeed', type: 'number' },
+      { key: 'maxForce', type: 'number' }
     ], true)
     this.options = options
 
@@ -40,9 +44,30 @@ class Animal {
     return color(this.meta.health)
   }
 
+  setTarget (target) {
+    this.currTarget = target
+  }
+
+  target (target) {
+    let desiredVel = p5.Vector.sub(p5.Vector.sub(target, this.pos)).setMag(this.options.maxSpeed)
+    let steering = p5.Vector.sub(desiredVel, this.vel).limit(this.options.maxForce)
+    this.applyForce(steering)
+  }
+
+  applyForce (force) {
+    this.vel.add(force)
+  }
+
+  update () {
+    this.target(this.currTarget || this.pos)
+    this.vel.add(this.acc)
+    this.pos.add(this.vel)
+  }
+
   draw () {
     push()
     translate(this.pos.x, this.pos.y)
+    rotate(this.vel.heading())
     stroke(0)
     fill(this.color)
     ellipse(0, 0, this.size)
@@ -51,6 +76,7 @@ class Animal {
     this.eyes.forEach(eye => {
       eye.draw()
     })
+    if (DEBUG) drawArrow(createVector(0, 0), this.vel, 'green')
     pop()
   }
   
@@ -61,14 +87,14 @@ class Animal {
         x: this.pos.x,
         y: this.pos.y
       },
-      // vel: {
-      //   x: this.vel.x,
-      //   y: this.vel.y
-      // },
-      // acc: {
-      //   x: this.acc.x,
-      //   y: this.acc.y
-      // },
+      vel: {
+        x: this.vel.x,
+        y: this.vel.y
+      },
+      acc: {
+        x: this.acc.x,
+        y: this.acc.y
+      },
       size: this.size,
       meta: this.meta,
       options: this.options
@@ -79,13 +105,13 @@ class Animal {
   static fromJsObject (o) {
     Object.requiresProperties(o, [
       { key: 'pos', type: 'object' },
-      // { key: 'vel', type: 'object' },
-      // { key: 'acc', type: 'object' },
+      { key: 'vel', type: 'object' },
+      { key: 'acc', type: 'object' },
       { key: 'size', type: 'number', min: 1 },
       { key: 'meta', type: 'object' },
       { key: 'options', type: 'object' }
     ])
-    let newAnimal = new this(o.pos, o.size, o.meta, o.options)
+    let newAnimal = new this(o.pos, o.vel, o.acc, o.size, o.meta, o.options)
     return newAnimal
   }
 }
