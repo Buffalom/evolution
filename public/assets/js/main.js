@@ -16,7 +16,7 @@ const options = {
   maxForce: 0.5
 }
 
-const generateNewId = false
+var generateNewWorldId = false
 var worldId
 const worldIdRegex = /^[a-zA-Z0-9]{5}$/
 if (window.location.pathname.split('/')[1].match(worldIdRegex)) {
@@ -35,22 +35,25 @@ async function setup () {
 
   world.setup()
 
-  if (!worldId && generateNewId) {
-    let worldCode = world.toCode()
-    axios.post('/worlds/add', { worldCode }).then(response => {
-      console.log('World Id:', response.data.id)
-    })
+  if (!worldId && generateNewWorldId) {
+    generateWorldId()
   }
 }
 
 function draw () {
-  world.draw()
-}
-
-function mouseMoved () {
-  world.animals.forEach(animal => {
-    animal.setTarget(createVector(mouseX, mouseY))
-  })
+  if (world) {
+    world.draw()
+    
+    // Follow the mouse
+    let target = null
+    if (mouseIsPressed) {
+      ellipse(mouseX, mouseY, 20)
+      target = createVector(mouseX, mouseY)
+    }
+    world.animals.forEach(animal => {
+      animal.setTarget(target)
+    })
+  }
 }
 
 function keyPressed () {
@@ -69,5 +72,12 @@ async function handleKey (k, p) {
   if (k === 65) l = p ? -1 : 1
   world.animals.forEach(animal => {
     animal.accelerate(createVector(r + l, u + d))
+  })
+}
+
+async function generateWorldId () {
+  let worldCode = world.toCode()
+  axios.post('/worlds/add', { worldCode }).then(response => {
+    console.log('World Id:', response.data.id)
   })
 }

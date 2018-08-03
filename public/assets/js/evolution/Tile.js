@@ -24,6 +24,11 @@ class Tile {
     noStroke()
     fill(this.color)
     rect(0, 0, this.size, this.size)
+    if (DEBUG && !this.meta.water) {
+      fill(0)
+      textSize(18)
+      text(this.meta.food, 0, this.size)
+    }
     pop()
   }
 

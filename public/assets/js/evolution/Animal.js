@@ -118,7 +118,7 @@ class Animal {
       { key: 'meta', type: 'object' },
       { key: 'options', type: 'object' }
     ])
-    let newAnimal = new this(o.pos, o.vel, o.acc, o.size, o.meta, o.options)
+    let newAnimal = new this(createVector(o.pos.x, o.pos.y), createVector(o.vel.x, o.vel.y), createVector(o.acc.x, o.acc.y), o.size, o.meta, o.options)
     return newAnimal
   }
 }
