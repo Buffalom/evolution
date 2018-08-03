@@ -81,3 +81,9 @@ async function generateWorldId () {
     console.log('World Id:', response.data.id)
   })
 }
+
+// Console instructions
+console.log('Toggle the global variable DEBUG to turn on/off the debug information.')
+console.log('Call the generateWorldId() function to get a new id for the current world state to restore it anytime.')
+console.log('NOTE: Changes (e.g. animal movement) after generationg the new id are not stored. Generate a new id to store the new state.')
+console.log('To restore a world from an id just go to the url /{yourWorldId}')

@@ -33,6 +33,17 @@ app.get('/worlds/:id([a-zA-Z0-9]{5})', (req, res) => {
     : res.status(404).send({ message: `No world with id ${req.params.id} found.`})
 })
 
+app.get('/worlds', (req, res) => {
+  console.log('getting worlds')
+  initFileIfNotExists(serverDataFile)
+  let data = JSON.parse(fs.readFileSync(serverDataFile))
+  worlds = data.worlds
+  Object.keys(worlds).forEach(id => {
+    delete worlds[id].worldCode
+  })
+  res.send(worlds)
+})
+
 app.post('/worlds/add', (req, res) => {
   initFileIfNotExists(serverDataFile)
   let data = JSON.parse(fs.readFileSync(serverDataFile))
@@ -41,7 +52,8 @@ app.post('/worlds/add', (req, res) => {
     let id = makeId(idLength)
     if (!data.worlds[id]) {
       data.worlds[id] = {
-        worldCode: req.body.worldCode || ''
+        worldCode: req.body.worldCode || '',
+        dateCreated: Math.floor(Date.now() / 1000)
       }
       fs.writeFileSync(serverDataFile, JSON.stringify(data, null, '  '))
       res.send({ id })
