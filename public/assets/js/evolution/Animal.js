@@ -20,6 +20,7 @@ class Animal {
       { key: 'maxForce', type: 'number' }
     ], true)
     this.options = options
+    this.options.rotation = this.vel.heading()
 
     this.initEyes()
   }
@@ -58,16 +59,22 @@ class Animal {
     this.vel.add(force)
   }
 
+  accelerate (force) {
+    this.acc.add(force.mult(createVector(this.options.maxForce, this.options.maxForce).mag()))
+  }
+
   update () {
+    if (this.currTarget && p5.Vector.sub(this.currTarget, this.pos).mag() < this.size * 0.5) this.currTarget = null
     this.target(this.currTarget || this.pos)
-    this.vel.add(this.acc)
+    this.vel.add(this.acc).limit(this.options.maxSpeed)
     this.pos.add(this.vel)
+    if (this.vel.mag() > 0) this.options.rotation = this.vel.heading()
   }
 
   draw () {
     push()
     translate(this.pos.x, this.pos.y)
-    rotate(this.vel.heading())
+    rotate(this.options.rotation)
     stroke(0)
     fill(this.color)
     ellipse(0, 0, this.size)

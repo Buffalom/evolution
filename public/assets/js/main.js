@@ -13,7 +13,7 @@ const options = {
   fieldOfVision: 160,
   visualRangeInTiles: 2,
   maxSpeed: 10,
-  maxForce: 0.6
+  maxForce: 0.5
 }
 
 const generateNewId = false
@@ -50,5 +50,24 @@ function draw () {
 function mousePressed () {
   world.animals.forEach(animal => {
     animal.setTarget(createVector(mouseX, mouseY))
+  })
+}
+
+function keyPressed () {
+  handleKey(keyCode, true)
+}
+
+function keyReleased () {
+  handleKey(keyCode, false)
+}
+
+async function handleKey (k, p) {
+  let u = 0, r = 0, d = 0, l = 0
+  if (k === 87) u = p ? -1 : 1
+  if (k === 68) r = p ? 1 : -1
+  if (k === 83) d = p ? 1 : -1
+  if (k === 65) l = p ? -1 : 1
+  world.animals.forEach(animal => {
+    animal.accelerate(createVector(r + l, u + d))
   })
 }
