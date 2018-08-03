@@ -1,4 +1,4 @@
-const DEBUG = true
+var DEBUG = true
 
 const options = {
   // World
@@ -47,7 +47,7 @@ function draw () {
   world.draw()
 }
 
-function mousePressed () {
+function mouseMoved () {
   world.animals.forEach(animal => {
     animal.setTarget(createVector(mouseX, mouseY))
   })
