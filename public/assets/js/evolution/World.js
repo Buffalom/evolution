@@ -85,12 +85,12 @@ class World {
     return newWorld
   }
 
-  // Generate base64 code of JS-object with all information to replicate
+  // Generate lzw code of JS-object with all information to replicate
   toCode () {
     return JSON.stringify(this.createJsObject()).lzw_encode()
   }
 
-  // Replicate world from base64 code
+  // Replicate world from lzw code
   static fromCode (code) {
     if (!code) throw new Error('Please provide a lzw encoded code to convert')
     return this.fromJsObject(JSON.parse(code.lzw_decode()))

@@ -20,7 +20,7 @@ class Animal {
       { key: 'maxForce', type: 'number' }
     ], true)
     this.options = options
-    this.options.rotation = this.vel.heading()
+    this.options.rotation = options.rotation || this.vel.heading()
 
     this.initEyes()
   }
